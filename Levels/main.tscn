@@ -100,18 +100,18 @@ shadow_enabled = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16400051, 1.1787357, 1.5771492)
 script = ExtResource("4_7pswh")
 
-[node name="Cube" type="MeshInstance3D" parent="Sword" unique_id=469552244 groups=["interactable"]]
+[node name="Cube" type="MeshInstance3D" parent="Sword" unique_id=469552244]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6112294, 0, -6.9361296)
 mesh = SubResource("ArrayMesh_5o7lb")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Sword/Cube" unique_id=333996270 groups=["interactable"]]
+[node name="StaticBody3D" type="StaticBody3D" parent="Sword/Cube" unique_id=333996270]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Sword/Cube/StaticBody3D" unique_id=616500151]
-transform = Transform3D(0.99998045, 0.0032423448, 0.0053538424, -0.0032957408, 0.9999446, 0.009992321, -0.005321139, -0.010009774, 0.99993575, 0.3729037, -0.19364941, -0.024720192)
+transform = Transform3D(0.99998045, 0.0032423448, 0.0053538424, -0.0032957408, 0.9999446, 0.009992321, -0.005321139, -0.010009774, 0.99993575, -0.000803411, -0.033081174, -0.024720192)
 shape = SubResource("BoxShape3D_7pswh")
 
 [node name="player" parent="." unique_id=1542477686 instance=ExtResource("2_gnif3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9292326, 1.0635927, -2.5343761)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0496702, 0.78745735, -3.4942474)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=880900893]
 
