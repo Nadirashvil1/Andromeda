@@ -24,7 +24,7 @@ func start_inspect(item: Node3D):
 	original_parent = item.get_parent()
 	
 	# Calculate target position in front of camera in world space
-	var target_pos = cam.global_position + (-cam.global_basis.z * 1.0)
+	var target_pos = cam.global_position + (cam.global_transform.basis * Vector3(0, 0, -1.5))
 	
 	# Smoothly move to front of camera in world space
 	var tween = get_tree().create_tween()
