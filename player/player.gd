@@ -6,16 +6,16 @@ const JUMP_VELOCITY = 4.5
 @onready var ray = $head/RayCast3D
 @onready var interact_label = get_node("/root/level/CanvasLayer/InteractLabel")
 
+var hold_timer = 0.0
+var hold_threshold = 0.2
+
 func _physics_process(delta: float) -> void:
-	# Gravity
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
-	# Jump
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 	
-	# Movement
 	var input_dir := Input.get_vector("left", "right", "forward", "backwards")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
@@ -28,9 +28,14 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _process(delta):
+	# Block all interaction while inspecting
+	if InspectManager.is_inspecting:
+		interact_label.visible = false
+		hold_timer = 0.0
+		return
+	
 	if ray.is_colliding():
 		var hit = ray.get_collider()
-		# Go up the tree to find the interactable node
 		var node = hit
 		var found = null
 		while node != null:
@@ -41,9 +46,20 @@ func _process(delta):
 		
 		if found != null:
 			interact_label.visible = true
-			if Input.is_action_just_pressed("interact"):
-				found.inspect()
+			
+			if Input.is_action_pressed("interact"):
+				hold_timer += delta
+				var progress = int((hold_timer / hold_threshold) * 100)
+				interact_label.text = "[ Hold E ] Inspect... " + str(progress) + "%"
+				if hold_timer >= hold_threshold:
+					hold_timer = 0.0
+					found.inspect()
+			else:
+				hold_timer = 0.0
+				interact_label.text = "[ Hold E ] Inspect"
 		else:
+			hold_timer = 0.0
 			interact_label.visible = false
 	else:
+		hold_timer = 0.0
 		interact_label.visible = false
