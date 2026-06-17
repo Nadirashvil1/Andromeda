@@ -1,6 +1,5 @@
 [gd_scene format=4 uid="uid://bdcbmhwappikc"]
 
-[ext_resource type="Texture2D" uid="uid://nai78gcedwp0" path="res://icon.svg" id="1_oj8hd"]
 [ext_resource type="PackedScene" uid="uid://dc486hdk0h7ne" path="res://scenery/house.tscn" id="2_34bfm"]
 [ext_resource type="PackedScene" uid="uid://df073bsw7g75j" path="res://player/player.tscn" id="2_gnif3"]
 [ext_resource type="Script" uid="uid://cx5fp67563qnk" path="res://Levels/inspect_sword.gd" id="4_7pswh"]
@@ -27,10 +26,6 @@ glow_enabled = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4q20e"]
 size = Vector3(20, 1, 30.348145)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gnif3"]
-albedo_texture = ExtResource("1_oj8hd")
-uv1_scale = Vector3(3, 2, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_lwy2l"]
 size = Vector3(2, 1, 1)
@@ -224,7 +219,6 @@ shape = SubResource("BoxShape3D_4q20e")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="floor/CollisionShape3D" unique_id=176223315]
 transform = Transform3D(10.015629, 0, 0, 0, 1, 0, 0, 0, 19.62003, -0.015816689, -0.019268036, -0.005323887)
-material_override = SubResource("StandardMaterial3D_gnif3")
 mesh = SubResource("BoxMesh_lwy2l")
 
 [node name="HOUSE" parent="floor/CollisionShape3D" unique_id=946960503 instance=ExtResource("2_34bfm")]

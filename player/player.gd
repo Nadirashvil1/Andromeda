@@ -4,7 +4,7 @@ const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
 @onready var ray = $head/RayCast3D
-@onready var interact_label = get_node("/root/level/CanvasLayer/InteractLabel")
+@onready var interact_label = get_tree().current_scene.get_node("CanvasLayer/InteractLabel")
 
 var hold_timer = 0.0
 var hold_threshold = 0.2

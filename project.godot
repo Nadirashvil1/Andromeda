@@ -11,9 +11,10 @@ config_version=5
 [application]
 
 config/name="andy"
+config/description="\"This is not a game about religion. It is a game about a man. The religion is simply the language the house speaks.\""
 run/main_scene="uid://bdcbmhwappikc"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://22xhnhrfcp86"
 
 [autoload]
 
