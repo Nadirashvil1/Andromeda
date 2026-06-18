@@ -20,6 +20,9 @@ mesh = SubResource("CapsuleMesh_oul6g")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49506366, 0)
 script = ExtResource("2_rkbax")
 
+[node name="EquipSlot" type="Node3D" parent="head" unique_id=738897838]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.33550942, 0, -0.5445713)
+
 [node name="Camera3D" type="Camera3D" parent="head" unique_id=1894645176]
 
 [node name="RayCast3D" type="RayCast3D" parent="head" unique_id=1360813496 groups=["player"]]

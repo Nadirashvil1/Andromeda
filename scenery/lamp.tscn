@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://ccrx2kfusr8av"]
+
+[ext_resource type="PackedScene" uid="uid://c4h2rd2rqfbfx" path="res://assetts/models/hand_lamp.glb" id="1_45y45"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bhunq"]
+radius = 14.258789
+height = 64.17554
+
+[node name="lamp" type="Node3D" unique_id=1384606628]
+
+[node name="hand_lamp" parent="." unique_id=512354010 instance=ExtResource("1_45y45")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7898091, -1.1920929e-07, -2.0048614)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="hand_lamp" unique_id=1461815114]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="hand_lamp/StaticBody3D" unique_id=112001000]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32.340797, 0)
+shape = SubResource("CapsuleShape3D_bhunq")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=888060886]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 34.10363, 0)
+omni_range = 89.26201

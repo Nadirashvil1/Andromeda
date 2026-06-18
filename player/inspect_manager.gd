@@ -11,7 +11,7 @@ var original_rotation: Vector3
 var original_player_rotation: Vector3
 var original_head_rotation: Vector3
 var crosshair = null
-
+var equipped_item : Node3D = null
 func start_inspect(item: Node3D):
 	is_inspecting = true
 	current_item = item
@@ -44,15 +44,17 @@ func start_inspect(item: Node3D):
 	var label = get_tree().current_scene.get_node("CanvasLayer/InteractLabel")
 	label.visible = true
 	
+	var equip_hint = "  [ G ] Equip " if item.is_in_group("equippable") else ""
+	
 	if item.inspect_type == "pin":
-		label.text = "[ E ] Close"
+		label.text = "[ E ] Close" + equip_hint
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	else:
 		# Show correct hint based on whether item is readable
 		if item.is_readable:
-			label.text = "[ E ] Close  [ F ] Read"
+			label.text = "[ E ] Close  [ F ] Read" + equip_hint
 		else:
-			label.text = "[ E ] Close  [ Hold LMB ] Rotate"
+			label.text = "[ E ] Close  [ Hold LMB ] Rotate" + equip_hint
 		
 		var target_pos = cam.global_position + (cam.global_transform.basis * Vector3(0, 0, -item.inspect_distance))
 		var tween = get_tree().create_tween()
@@ -60,7 +62,7 @@ func start_inspect(item: Node3D):
 		tween.parallel().tween_property(item, "rotation", Vector3(0, 0, 0), 0.4)
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-func stop_inspect():
+func stop_inspect(is_equipping = false):
 	# Close read panel first if open
 	var read_panel = get_tree().current_scene.get_node_or_null("CanvasLayer/ReadPanel")
 	if read_panel and read_panel.visible:
@@ -83,7 +85,7 @@ func stop_inspect():
 	label.text = "[ Hold E ] Inspect"
 	label.visible = false
 	
-	if current_item.inspect_type == "move":
+	if current_item.inspect_type == "move" and not is_equipping:
 		var tween = get_tree().create_tween()
 		tween.tween_property(current_item, "global_position", original_position, 0.4)
 		tween.parallel().tween_property(current_item, "rotation", original_rotation, 0.4)
@@ -92,15 +94,18 @@ func stop_inspect():
 	player_node.set_physics_process(true)
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	current_item = null
+	
+	if not is_equipping:
+		current_item = null
 
 func _toggle_read_panel():
 	var panel = get_tree().current_scene.get_node("CanvasLayer/ReadPanel")
 	if panel.visible:
 		panel.visible = false
 		# Restore inspect hint
+		var equip_hint = "  [ G ] Equip" if current_item.is_in_group("equippable") else ""
 		var label = get_tree().current_scene.get_node("CanvasLayer/InteractLabel")
-		label.text = "[ E ] Close  [ F ] Read"
+		label.text = "[ E ] Close  [ F ] Read" + equip_hint
 	else:
 		var read_text = get_tree().current_scene.get_node("CanvasLayer/ReadPanel/VBoxContainer/ReadText")
 		var read_hints = get_tree().current_scene.get_node("CanvasLayer/ReadPanel/VBoxContainer/ReadHints")
@@ -115,6 +120,32 @@ func _is_reading():
 	var panel = get_tree().current_scene.get_node_or_null("CanvasLayer/ReadPanel")
 	return panel != null and panel.visible
 
+func equip_current_item():
+	var item_to_equip = current_item
+	var active_tweens = get_tree().get_processed_tweens()
+	for t in active_tweens:
+		if t.is_valid():
+			t.kill()
+	stop_inspect(true)
+	
+	var equip_slot = head_node.get_node_or_null("EquipSlot")
+	
+	if equip_slot:
+		item_to_equip.get_parent().remove_child(item_to_equip)
+		equip_slot.add_child(item_to_equip)
+		item_to_equip.position = Vector3.ZERO
+		item_to_equip.rotation = Vector3.ZERO
+		
+		for child in item_to_equip.find_children("*", "CollisionShape3D", true, false):
+			child.set_deferred("disabled", true)
+		
+		if item_to_equip is RigidBody3D:
+			item_to_equip.freeze = true
+		
+		equipped_item = item_to_equip
+	else:
+		print("Error: Could not Find 'EquipSlot' on the player's head node!")
+	current_item = null
 func _input(event):
 	if not is_inspecting:
 		return
@@ -136,6 +167,9 @@ func _input(event):
 		elif event.is_action_pressed("interact"):
 			if not _is_reading():
 				stop_inspect()
-
+		elif event.is_action_pressed("equip"):
+			if current_item and current_item.is_in_group("equippable") and not _is_reading():
+				equip_current_item()
+	 
 func _process(delta):
 	pass

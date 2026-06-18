@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://c3t0xjvowadrj" path="res://assetts/note/note_Paper005_1K-JPG_Color.jpg" id="8_u05pv"]
 [ext_resource type="Texture2D" uid="uid://bxke48n8y5ma7" path="res://assetts/note/note_Paper005_1K-JPG_Roughness.png" id="9_mykqc"]
 [ext_resource type="Texture2D" uid="uid://gqtrrkrmqnce" path="res://assetts/note/note_Paper005_1K-JPG_NormalGL.jpg" id="10_hilkn"]
+[ext_resource type="PackedScene" uid="uid://ccrx2kfusr8av" path="res://scenery/lamp.tscn" id="11_hilkn"]
+[ext_resource type="Script" uid="uid://cflvk11ljeqj8" path="res://scenery/lamp_inspect.gd" id="12_5mxy1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gnif3"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -229,7 +231,7 @@ transform = Transform3D(1, 0, 0, 0, 0.01743498, 0.999848, 0, -0.999848, 0.017434
 shadow_enabled = true
 
 [node name="player" parent="." unique_id=1542477686 instance=ExtResource("2_gnif3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0496702, 0.78745735, -3.4942474)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0496702, 0.78745735, -2.9517326)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=880900893]
 
@@ -354,3 +356,7 @@ physics_material_override = SubResource("PhysicsMaterial_hilkn")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="note/Plane/StaticBody3D" unique_id=930576537]
 transform = Transform3D(0.9999719, 0, 0, 0, 0.99998313, 0, 0, 0, 1, 0.12200689, -0.006516993, 0.104400635)
 shape = SubResource("BoxShape3D_5mxy1")
+
+[node name="lamp" parent="." unique_id=1384606628 groups=["equippable", "interactable"] instance=ExtResource("11_hilkn")]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 6.720489, 0.78854895, -4.234748)
+script = ExtResource("12_5mxy1")
