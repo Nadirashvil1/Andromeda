@@ -20,6 +20,11 @@ config/icon="uid://22xhnhrfcp86"
 
 InspectManager="*uid://bx88mh2ltd5x7"
 
+[global_group]
+
+interactable=""
+equippable=""
+
 [input]
 
 forward={

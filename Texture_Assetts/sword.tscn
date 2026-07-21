@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://g8w6jv24g0nw"]
+
+[ext_resource type="PackedScene" uid="uid://t8tjhnxk0pc4" path="res://assetts/sword.blend.glb" id="1_fwx5i"]
+[ext_resource type="Script" uid="uid://b73xgusrbt7jc" path="res://Scripts/sword.gd" id="2_c5dtl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bhunq"]
+size = Vector3(0.028709412, 0.038879395, 1.2346191)
+
+[node name="Sword" unique_id=1970673938 instance=ExtResource("1_fwx5i")]
+script = ExtResource("2_c5dtl")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Cube" parent_id_path=PackedInt32Array(469552244) index="0" unique_id=1606740847]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube/StaticBody3D" index="0" unique_id=885781677]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0014543831, -0.0021534562, 0.07507324)
+shape = SubResource("BoxShape3D_bhunq")
