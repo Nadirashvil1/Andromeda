@@ -146,7 +146,33 @@ func equip_current_item():
 	else:
 		print("Error: Could not Find 'EquipSlot' on the player's head node!")
 	current_item = null
+func unequip_current_item():
+	if not equipped_item:
+		return
+		
+	var item = equipped_item
+	var equip_slot = head_node.get_node_or_null("EquipSlot")
+		
+	if equip_slot:
+		equip_slot.remove_child(item)
+			
+	var world = get_tree().current_scene
+	world.add_child(item)
+		
+	item.global_position = cam.global_position + (cam.global_transform.basis * Vector3(0, -0.3, -1.0))
+	item.global_rotation = Vector3.ZERO
+		
+	for child in item.find_children("*", "CollisionShape3D", true, false):
+		child.set_deferred("disabled", false)
+	if item is RigidBody3D:
+		item.freeze = false
+	
+	equipped_item = null
 func _input(event):
+	if event is InputEventKey and event.is_action_pressed("equip"):
+		if equipped_item and not is_inspecting:
+			unequip_current_item()
+			return
 	if not is_inspecting:
 		return
 	
