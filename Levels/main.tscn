@@ -246,5 +246,5 @@ shape = SubResource("BoxShape3D_5mxy1")
 transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 6.720489, 0.78854895, -4.234748)
 script = ExtResource("12_5mxy1")
 
-[node name="Sword" parent="." unique_id=1970673938 groups=["interactable"] instance=ExtResource("11_mykqc")]
+[node name="Sword" parent="." unique_id=1970673938 groups=["equippable", "interactable"] instance=ExtResource("11_mykqc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45997834, 0.13101643, -2.548775)

@@ -133,8 +133,8 @@ func equip_current_item():
 	if equip_slot:
 		item_to_equip.get_parent().remove_child(item_to_equip)
 		equip_slot.add_child(item_to_equip)
-		item_to_equip.position = Vector3.ZERO
-		item_to_equip.rotation = Vector3.ZERO
+		item_to_equip.position = item_to_equip.equip_position
+		item_to_equip.rotation = item_to_equip.equip_rotation_degrees
 		
 		for child in item_to_equip.find_children("*", "CollisionShape3D", true, false):
 			child.set_deferred("disabled", true)
