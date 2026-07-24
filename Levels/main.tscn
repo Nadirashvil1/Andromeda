@@ -232,7 +232,7 @@ offset_right = 600.0
 offset_bottom = 500.0
 script = ExtResource("3_u05pv")
 
-[node name="note" type="Node3D" parent="." unique_id=1624085781 groups=["interactable"]]
+[node name="note" type="Node3D" parent="." unique_id=1624085781 groups=["grabbable", "interactable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45564795, 0.51209843, -1.0484791)
 script = ExtResource("8_mykqc")
 icon = ExtResource("8_u05pv")
@@ -256,6 +256,6 @@ shape = SubResource("BoxShape3D_5mxy1")
 transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 6.720489, 0.78854895, -4.234748)
 script = ExtResource("12_5mxy1")
 
-[node name="Sword" parent="." unique_id=1970673938 groups=["equippable", "interactable"] instance=ExtResource("11_mykqc")]
+[node name="Sword" parent="." unique_id=1970673938 groups=["equippable", "grabbable", "interactable"] instance=ExtResource("11_mykqc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45997834, 0.13101643, -2.548775)
 icon = ExtResource("11_5mxy1")

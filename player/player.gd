@@ -5,7 +5,8 @@ const JUMP_VELOCITY = 4.5
 
 @onready var ray = $head/RayCast3D
 @onready var interact_label = get_tree().current_scene.get_node("CanvasLayer/InteractLabel")
-
+@onready var raycast: RayCast3D = $head/RayCast3D
+@onready var camera: Camera3D = $head/Camera3D
 var hold_timer = 0.0
 var hold_threshold = 0.2
 
@@ -26,6 +27,27 @@ func _physics_process(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 	
 	move_and_slide()
+func _unhandled_input(event):
+	if event.is_action_pressed("grab"):
+		print("grab pressed")
+		if GrabManager.held_item:
+			GrabManager.stop_grab()
+		else:
+			var hit = raycast.get_collider()
+			print("hit: ", hit)
+			if hit:
+				var target = hit
+				while target and not target.is_in_group("grabbable"):
+					target = target.get_parent()
+				print("target after walk: ", target)
+				if target and target is RigidBody3D:
+					GrabManager.start_grab(target, camera)
+
+	if GrabManager.held_item and event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			GrabManager.adjust_distance(-0.2)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			GrabManager.adjust_distance(0.2)
 
 func _process(delta):
 	# Block all interaction while inspecting
