@@ -7,7 +7,7 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	# Don't process camera if inspecting
-	if InspectManager.is_inspecting:
+	if InspectManager.is_inspecting or InventoryManager.is_open:
 		return
 	
 	if event is InputEventMouseMotion:

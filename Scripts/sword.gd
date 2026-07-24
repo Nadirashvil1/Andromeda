@@ -1,7 +1,13 @@
 extends Node3D
 
-var item_name = "Test_Sword01"
-var item_description = "Test"
+
+@export var item_id: String = "sword"          # unique per item type
+@export var icon: Texture2D                     # drag your icon png in the Inspector
+@export var inv_width: int = 1                   # cells wide, like RE's grid
+@export var inv_height: int = 2                  # cells tall
+@export var is_collectible: bool = true          # goes to inventory vs stays equippable-only
+@export var item_name: String = "Test_Sword01"
+@export var item_description: String = "Test"
 var is_readable = false
 var readable_text = ""
 var inspect_type = "move"

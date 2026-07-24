@@ -45,16 +45,17 @@ func start_inspect(item: Node3D):
 	label.visible = true
 	
 	var equip_hint = "  [ G ] Equip " if item.is_in_group("equippable") else ""
+	var pickup_hint = "  [ P ] Pick Up" if item.is_collectible else ""
 	
 	if item.inspect_type == "pin":
-		label.text = "[ E ] Close" + equip_hint
+		label.text = "[ E ] Close" + equip_hint + pickup_hint
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	else:
 		# Show correct hint based on whether item is readable
 		if item.is_readable:
-			label.text = "[ E ] Close  [ F ] Read" + equip_hint
+			label.text = "[ E ] Close  [ F ] Read" + equip_hint + pickup_hint
 		else:
-			label.text = "[ E ] Close  [ Hold LMB ] Rotate" + equip_hint
+			label.text = "[ E ] Close  [ Hold LMB ] Rotate" + equip_hint + pickup_hint
 		
 		var target_pos = cam.global_position + (cam.global_transform.basis * Vector3(0, 0, -item.inspect_distance))
 		var tween = get_tree().create_tween()
@@ -196,6 +197,11 @@ func _input(event):
 		elif event.is_action_pressed("equip"):
 			if current_item and current_item.is_in_group("equippable") and not _is_reading():
 				equip_current_item()
+		elif event.is_action_pressed("pickup"):
+			if current_item and current_item.is_collectible and not _is_reading():
+				if InventoryManager.add_item(current_item):
+					current_item.queue_free()
+					stop_inspect(true)
 	 
 func _process(delta):
 	pass

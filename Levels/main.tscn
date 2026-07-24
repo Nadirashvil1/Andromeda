@@ -2,10 +2,12 @@
 
 [ext_resource type="PackedScene" uid="uid://dc486hdk0h7ne" path="res://Texture_Assetts/house.tscn" id="2_34bfm"]
 [ext_resource type="PackedScene" uid="uid://df073bsw7g75j" path="res://player/player.tscn" id="2_gnif3"]
+[ext_resource type="Script" uid="uid://cye6dcakm1mbf" path="res://Scripts/inventory_ui.gd" id="3_u05pv"]
 [ext_resource type="Script" uid="uid://db3hywrkj6xvw" path="res://Scripts/note_inspect.gd" id="8_mykqc"]
 [ext_resource type="Texture2D" uid="uid://c3t0xjvowadrj" path="res://assetts/note/note_Paper005_1K-JPG_Color.jpg" id="8_u05pv"]
 [ext_resource type="Texture2D" uid="uid://bxke48n8y5ma7" path="res://assetts/note/note_Paper005_1K-JPG_Roughness.png" id="9_mykqc"]
 [ext_resource type="Texture2D" uid="uid://gqtrrkrmqnce" path="res://assetts/note/note_Paper005_1K-JPG_NormalGL.jpg" id="10_hilkn"]
+[ext_resource type="Texture2D" uid="uid://qoo66i3i3ct4" path="res://assetts/sword_1000016102.jpg" id="11_5mxy1"]
 [ext_resource type="PackedScene" uid="uid://ccrx2kfusr8av" path="res://Texture_Assetts/lamp.tscn" id="11_hilkn"]
 [ext_resource type="PackedScene" uid="uid://g8w6jv24g0nw" path="res://Texture_Assetts/sword.tscn" id="11_mykqc"]
 [ext_resource type="Script" uid="uid://cflvk11ljeqj8" path="res://Scripts/lamp_inspect.gd" id="12_5mxy1"]
@@ -223,9 +225,17 @@ layout_mode = 2
 text = "[ F ] Close"
 horizontal_alignment = 1
 
+[node name="InventoryUI" type="Control" parent="CanvasLayer" unique_id=933168197]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 600.0
+offset_bottom = 500.0
+script = ExtResource("3_u05pv")
+
 [node name="note" type="Node3D" parent="." unique_id=1624085781 groups=["interactable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45564795, 0.51209843, -1.0484791)
 script = ExtResource("8_mykqc")
+icon = ExtResource("8_u05pv")
 
 [node name="Plane" type="MeshInstance3D" parent="note" unique_id=276868444]
 transform = Transform3D(0.074999996, 0, 0, 0, 1, 0, 0, 0, 0.04, 0, 0, 0)
@@ -248,3 +258,4 @@ script = ExtResource("12_5mxy1")
 
 [node name="Sword" parent="." unique_id=1970673938 groups=["equippable", "interactable"] instance=ExtResource("11_mykqc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45997834, 0.13101643, -2.548775)
+icon = ExtResource("11_5mxy1")
