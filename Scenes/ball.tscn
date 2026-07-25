@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://wreflysgbk2v"]
+
+[ext_resource type="PackedScene" uid="uid://cmmi17u2lkbau" path="res://assetts/blend_files/Ball BLEND.blend" id="1_d60mj"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_sn0t7"]
+radius = 0.4970082
+
+[node name="Ball" type="RigidBody3D" unique_id=783111634]
+
+[node name="Ball BLEND" parent="." unique_id=470006707 instance=ExtResource("1_d60mj")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=112107163]
+shape = SubResource("SphereShape3D_sn0t7")

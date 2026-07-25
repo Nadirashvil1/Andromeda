@@ -11,6 +11,9 @@
 [ext_resource type="PackedScene" uid="uid://ccrx2kfusr8av" path="res://Texture_Assetts/lamp.tscn" id="11_hilkn"]
 [ext_resource type="PackedScene" uid="uid://g8w6jv24g0nw" path="res://Texture_Assetts/sword.tscn" id="11_mykqc"]
 [ext_resource type="Script" uid="uid://cflvk11ljeqj8" path="res://Scripts/lamp_inspect.gd" id="12_5mxy1"]
+[ext_resource type="PackedScene" uid="uid://wreflysgbk2v" path="res://Scenes/ball.tscn" id="12_hilkn"]
+[ext_resource type="PackedScene" uid="uid://dahcjy3kjlmm4" path="res://Scenes/sword_rigid.tscn" id="13_3lhg3"]
+[ext_resource type="Script" uid="uid://b73xgusrbt7jc" path="res://Scripts/sword.gd" id="14_wgfyn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gnif3"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -259,3 +262,10 @@ script = ExtResource("12_5mxy1")
 [node name="Sword" parent="." unique_id=1970673938 groups=["equippable", "grabbable", "interactable"] instance=ExtResource("11_mykqc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45997834, 0.13101643, -2.548775)
 icon = ExtResource("11_5mxy1")
+
+[node name="Ball" parent="." unique_id=783111634 groups=["equippable", "grabbable", "interactable"] instance=ExtResource("12_hilkn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.355456, 1.2448459, -1.072401)
+
+[node name="Sword2" parent="." unique_id=70353576 groups=["equippable"] instance=ExtResource("13_3lhg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3439049, 0.5980964, -1.3698282)
+script = ExtResource("14_wgfyn")
