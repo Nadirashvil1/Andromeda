@@ -121,31 +121,43 @@ func _is_reading():
 	var panel = get_tree().current_scene.get_node_or_null("CanvasLayer/ReadPanel")
 	return panel != null and panel.visible
 
-func equip_current_item():
-	var item_to_equip = current_item
+func equip_current_item(item = null):
+	var item_to_equip = item if item else current_item
+	if not item_to_equip:
+		return
+
 	var active_tweens = get_tree().get_processed_tweens()
 	for t in active_tweens:
 		if t.is_valid():
 			t.kill()
-	stop_inspect(true)
-	
+
+	# Only run the inspect-teardown if we actually are inspecting
+	if is_inspecting:
+		stop_inspect(true)
+
+	if not head_node:
+		head_node = get_viewport().get_camera_3d().get_parent()
+
 	var equip_slot = head_node.get_node_or_null("EquipSlot")
-	
+
 	if equip_slot:
-		item_to_equip.get_parent().remove_child(item_to_equip)
+		if item_to_equip.get_parent():
+			item_to_equip.get_parent().remove_child(item_to_equip)
 		equip_slot.add_child(item_to_equip)
+		item_to_equip.visible = true
 		item_to_equip.position = item_to_equip.equip_position
-		item_to_equip.rotation = item_to_equip.equip_rotation_degrees
-		
+		item_to_equip.rotation_degrees = item_to_equip.equip_rotation_degrees
+
 		for child in item_to_equip.find_children("*", "CollisionShape3D", true, false):
 			child.set_deferred("disabled", true)
-		
+
 		if item_to_equip is RigidBody3D:
 			item_to_equip.freeze = true
-		
+
 		equipped_item = item_to_equip
 	else:
 		print("Error: Could not Find 'EquipSlot' on the player's head node!")
+
 	current_item = null
 func unequip_current_item():
 	if not equipped_item:
@@ -200,8 +212,9 @@ func _input(event):
 		elif event.is_action_pressed("pickup"):
 			if current_item and current_item.is_collectible and not _is_reading():
 				if InventoryManager.add_item(current_item):
-					current_item.queue_free()
-					stop_inspect(true)
-	 
+						current_item.get_parent().remove_child(current_item)
+						current_item.visible = false
+						stop_inspect(true)
+
 func _process(delta):
 	pass

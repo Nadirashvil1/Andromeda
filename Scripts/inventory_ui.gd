@@ -3,11 +3,13 @@ extends Control
 const CELL_SIZE = 64
 const GRID_W = 8
 const GRID_H = 6
+const CLICK_THRESHOLD = 6.0
 
 var background: ColorRect
 var player_node: Node = null
 var icon_nodes: Dictionary = {}
 var dragging_id = null
+var press_start_pos: Vector2
 
 func _ready():
 	InventoryManager.inventory_changed.connect(_refresh)
@@ -50,10 +52,8 @@ func _input(event):
 
 func _refresh():
 	for child in get_children():
-		if child != background:
+		if child != background and child.name != "ItemActionMenu":
 			child.queue_free()
-	icon_nodes.clear()
-
 	for item_id in InventoryManager.items:
 		var data = InventoryManager.items[item_id]
 		var icon_rect = TextureRect.new()
@@ -65,21 +65,97 @@ func _refresh():
 		icon_rect.gui_input.connect(_on_icon_gui_input.bind(item_id))
 		add_child(icon_rect)
 		icon_nodes[item_id] = icon_rect
-
+		
 func _on_icon_gui_input(event, item_id):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
+			print("press on ", item_id)
 			dragging_id = item_id
+			press_start_pos = event.position
 			icon_nodes[item_id].z_index = 10
 		elif dragging_id == item_id:
-			_end_drag()
-
-func _end_drag():
+			var moved = event.position.distance_to(press_start_pos)
+			print("release on ", item_id, " moved: ", moved)
+			if moved < CLICK_THRESHOLD:
+				_open_item_menu(item_id)
+				_end_drag(false)
+			else:
+				_end_drag(true)
+func _end_drag(commit_move: bool):
 	var icon = icon_nodes.get(dragging_id)
-	if icon:
+	if commit_move and icon:
 		var cell = Vector2i(round(icon.position.x / CELL_SIZE), round(icon.position.y / CELL_SIZE))
 		cell.x = clamp(cell.x, 0, GRID_W - 1)
 		cell.y = clamp(cell.y, 0, GRID_H - 1)
 		InventoryManager.move_item(dragging_id, cell)
 	dragging_id = null
 	_refresh()
+
+var context_menu: PopupMenu = null
+
+func _open_item_menu(item_id):
+	var data = InventoryManager.items[item_id]
+	var item_node = data.source_node
+
+	# Clean up any existing menu first
+	var old_menu = get_node_or_null("ItemActionMenu")
+	if old_menu:
+		old_menu.queue_free()
+
+	var menu = PanelContainer.new()
+	menu.name = "ItemActionMenu"
+	var vbox = VBoxContainer.new()
+	menu.add_child(vbox)
+
+	var inspect_btn = Button.new()
+	inspect_btn.text = "Inspect"
+	inspect_btn.pressed.connect(func():
+		_inspect_from_bag(item_id)
+		menu.queue_free()
+	)
+	vbox.add_child(inspect_btn)
+
+	if item_node.is_in_group("equippable"):
+		var equip_btn = Button.new()
+		equip_btn.text = "Equip"
+		equip_btn.pressed.connect(func():
+			_equip_from_bag(item_id)
+			menu.queue_free()
+		)
+		vbox.add_child(equip_btn)
+
+	add_child(menu)
+	menu.position = Vector2(600, 400)
+func _inspect_from_bag(item_id):
+	var data = InventoryManager.items[item_id]
+	var item_node = data.source_node
+
+	# Close the bag first
+	InventoryManager.is_open = false
+	visible = false
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+	# Bring the item back into the world in front of the camera, then inspect it
+	var cam = get_viewport().get_camera_3d()
+	get_tree().current_scene.add_child(item_node)
+	item_node.global_position = cam.global_position + (-cam.global_transform.basis.z * 1.5)
+	item_node.visible = true
+
+	InventoryManager.remove_item(item_id)
+	item_node.inspect()
+
+func _equip_from_bag(item_id):
+	var data = InventoryManager.items[item_id]
+	var item_node = data.source_node
+
+	InventoryManager.is_open = false
+	visible = false
+
+	get_tree().current_scene.add_child(item_node)
+	InventoryManager.remove_item(item_id)
+
+	InspectManager.equip_current_item(item_node)
+
+	player_node.set_process_input(true)
+	player_node.set_physics_process(true)
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
