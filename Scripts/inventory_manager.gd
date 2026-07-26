@@ -24,6 +24,33 @@ func can_place(x: int, y: int, w: int, h: int) -> bool:
 			if grid[iy][ix] != null:
 				return false
 	return true
+	
+	
+	
+func move_item(item_id: String, new_pos: Vector2i) -> bool:
+	if not items.has(item_id):
+		return false
+	var data = items[item_id]
+	var old_pos = data.grid_pos
+
+	for y in range(old_pos.y, old_pos.y + data.height):
+		for x in range(old_pos.x, old_pos.x + data.width):
+			grid[y][x] = null
+
+	if can_place(new_pos.x, new_pos.y, data.width, data.height):
+		for y in range(new_pos.y, new_pos.y + data.height):
+			for x in range(new_pos.x, new_pos.x + data.width):
+				grid[y][x] = item_id
+		data.grid_pos = new_pos
+		inventory_changed.emit()
+		return true
+	else:
+		for y in range(old_pos.y, old_pos.y + data.height):
+			for x in range(old_pos.x, old_pos.x + data.width):
+				grid[y][x] = item_id
+		return false
+
+
 func find_free_spot(w: int, h: int) -> Vector2i:
 	for y in range(GRID_HEIGHT):
 		for x in range(GRID_WIDTH):
